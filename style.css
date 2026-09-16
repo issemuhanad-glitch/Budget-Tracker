@@ -13,14 +13,91 @@ h1 {
     margin-top: 20px;
 }
 
+#add-expense > form {
+    padding: 10px;
+}
+
+.add-expense-section input:not([type="submit"]),
+.add-expense-section select {
+    display: block;
+    margin-bottom: 15px;
+    padding: 8px;
+}
+
+input:focus,
+select:focus {
+    outline: 2px solid blue;
+}
+
+button {
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
 .expenses {
     background-color: lightgray;
     padding: 20px;
     margin-top: 20px;
 }
 
-input {
-    display: block;
-    margin-bottom: 15px;
-    padding: 8px;
+.expenses table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.expenses th,
+.expenses td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: left;
+}
+
+.expenses th {
+    background-color: steelblue;
+    color: white;
+}
+
+.expenses tr:nth-child(even) {
+    background-color: white;
+}
+
+.expenses tr:hover {
+    background-color: lightyellow;
+}
+
+.how-to-use {
+    margin-top: 20px;
+    padding: 15px;
+}
+
+.video {
+    margin-top: 20px;
+}
+/* Expense table */
+.expenses-section table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.expenses-section th,
+.expenses-section td {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.expenses-section th {
+    background-color: lightblue;
+}
+
+.expenses-section tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.expenses-section tr:hover {
+    background-color: lightgray;
+}
+
+/* Button */
+button {
+    cursor: pointer;
 }
