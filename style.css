@@ -1,103 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap');
+
+/* ---------- Color Palette ---------- */
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --background: #f1f5f9;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #cbd5e1;
+    --table-header: #2563eb;
+    --table-alt: #eff6ff;
+    --hover: #dbeafe;
+}
+
+/* ---------- Page ---------- */
 body {
-    font-family: Arial, sans-serif;
-    margin: 30px;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    margin: 0;
+    padding: 30px;
 }
 
+/* ---------- Main Heading Card ---------- */
 h1 {
+    font-family: 'Poppins', sans-serif;
     text-align: center;
+    background-color: var(--card);
+    color: var(--primary);
+    padding: 25px;
+    margin: 0 auto 25px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    max-width: 900px;
 }
 
+/* ---------- General Headings ---------- */
+h2 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-dark);
+}
+
+/* ---------- Add Expense Card ---------- */
 #add-expense {
-    background-color: lightblue;
-    padding: 20px;
-    margin-top: 20px;
+    background-color: var(--card);
+    padding: 25px;
+    margin: 0 auto 25px;
+    max-width: 900px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
 }
 
 #add-expense > form {
     padding: 10px;
 }
 
+/* ---------- Form ---------- */
 .add-expense-section input:not([type="submit"]),
 .add-expense-section select {
     display: block;
-    margin-bottom: 15px;
-    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 18px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
 }
 
 input:focus,
 select:focus {
-    outline: 2px solid blue;
+    outline: 2px solid var(--primary);
+    border-color: var(--primary);
 }
 
+/* ---------- Button ---------- */
 button {
-    padding: 10px 15px;
+    background-color: var(--primary);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
     cursor: pointer;
 }
 
-.expenses {
-    background-color: lightgray;
-    padding: 20px;
-    margin-top: 20px;
+button:hover {
+    background-color: var(--primary-dark);
 }
 
+/* ---------- Expense Table Card ---------- */
+.expenses {
+    background-color: var(--card);
+    padding: 25px;
+    margin: 0 auto 25px;
+    max-width: 900px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+/* ---------- Table ---------- */
 .expenses table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 15px;
 }
 
 .expenses th,
 .expenses td {
-    border: 1px solid black;
-    padding: 10px;
+    border: 1px solid var(--border);
+    padding: 12px;
     text-align: left;
+    font-family: 'Roboto', sans-serif;
 }
 
 .expenses th {
-    background-color: steelblue;
+    background-color: var(--table-header);
     color: white;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
 }
 
 .expenses tr:nth-child(even) {
-    background-color: white;
+    background-color: var(--table-alt);
 }
 
 .expenses tr:hover {
-    background-color: lightyellow;
+    background-color: var(--hover);
 }
 
+/* ---------- How To Use ---------- */
 .how-to-use {
-    margin-top: 20px;
-    padding: 15px;
+    max-width: 900px;
+    margin: 0 auto 25px;
+    padding: 20px;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
 }
 
-.video {
-    margin-top: 20px;
-}
-/* Expense table */
-.expenses-section table {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-.expenses-section th,
-.expenses-section td {
-    border: 1px solid black;
-    padding: 10px;
-}
-
-.expenses-section th {
-    background-color: lightblue;
-}
-
-.expenses-section tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-.expenses-section tr:hover {
-    background-color: lightgray;
-}
-
-/* Button */
-button {
+summary {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: var(--primary-dark);
     cursor: pointer;
 }
+
+/* ---------- Video ---------- */
+.video {
+    max-width: 900px;
+    margin: 0 auto 25px;
+    padding: 20px;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.video iframe {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+
