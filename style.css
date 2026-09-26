@@ -1,167 +1,243 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap');
+/* =========================
+   SpendWise Theme
+   ========================= */
 
-/* ---------- Color Palette ---------- */
 :root {
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --background: #f1f5f9;
-    --card: #ffffff;
-    --text: #1e293b;
-    --muted: #64748b;
-    --border: #cbd5e1;
-    --table-header: #2563eb;
-    --table-alt: #eff6ff;
-    --hover: #dbeafe;
+    --brand-color: #2563eb;
+    --accent-color: #14b8a6;
+    --surface-color: #ffffff;
+    --background-color: #f1f5f9;
+    --primary-text: #1e293b;
+    --secondary-text: #64748b;
+    --border-color: #cbd5e1;
 }
 
-/* ---------- Page ---------- */
+/* =========================
+   Basic Page Styling
+   ========================= */
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: var(--background);
-    color: var(--text);
     margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--primary-text);
+}
+
+/* =========================
+   CSS GRID - Main Dashboard
+   ========================= */
+
+.dashboard {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+}
+
+/* =========================
+   Sidebar - FLEXBOX
+   ========================= */
+
+.sidebar {
+    background-color: var(--brand-color);
+    color: white;
+    padding: 25px 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.logo h2 {
+    margin: 0;
+}
+
+/* Sidebar navigation using Flexbox */
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.nav-item:hover,
+.nav-item:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================
+   Main Content
+   ========================= */
+
+.main-content {
     padding: 30px;
 }
 
-/* ---------- Main Heading Card ---------- */
-h1 {
-    font-family: 'Poppins', sans-serif;
-    text-align: center;
-    background-color: var(--card);
-    color: var(--primary);
+/* =========================
+   Header - FLEXBOX
+   ========================= */
+
+.dashboard-header {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-header h1 {
+    margin: 0 0 5px;
+    color: var(--brand-color);
+}
+
+.dashboard-header p {
+    margin: 0;
+    color: var(--secondary-text);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    color: var(--secondary-text);
+}
+
+/* =========================
+   Cards - CSS GRID
+   ========================= */
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Each card uses Flexbox */
+
+.dashboard-card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
     padding: 25px;
-    margin: 0 auto 25px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    max-width: 900px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    min-height: 170px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-/* ---------- General Headings ---------- */
-h2 {
-    font-family: 'Poppins', sans-serif;
-    color: var(--primary-dark);
+/* Card hover interaction */
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
 }
 
-/* ---------- Add Expense Card ---------- */
-#add-expense {
-    background-color: var(--card);
-    padding: 25px;
-    margin: 0 auto 25px;
-    max-width: 900px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
+/* Keyboard focus interaction */
+
+.dashboard-card:focus {
+    outline: 3px solid var(--accent-color);
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
 }
 
-#add-expense > form {
-    padding: 10px;
+.dashboard-card h3 {
+    margin: 0;
+    color: var(--brand-color);
 }
 
-/* ---------- Form ---------- */
-.add-expense-section input:not([type="submit"]),
-.add-expense-section select {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 18px;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 15px;
+.dashboard-card .amount {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 15px 0;
+    color: var(--primary-text);
 }
 
-input:focus,
-select:focus {
-    outline: 2px solid var(--primary);
-    border-color: var(--primary);
+.dashboard-card span {
+    color: var(--secondary-text);
+    font-size: 14px;
 }
 
-/* ---------- Button ---------- */
-button {
-    background-color: var(--primary);
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    cursor: pointer;
+/* =========================
+   Responsive Design
+   ========================= */
+
+@media (max-width: 768px) {
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        padding: 15px;
+    }
+
+    .navigation {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
 }
 
-button:hover {
-    background-color: var(--primary-dark);
+/* =========================
+   Stretch Goal - Dark Theme
+   ========================= */
+
+@media (prefers-color-scheme: dark) {
+
+    :root {
+        --brand-color: #60a5fa;
+        --accent-color: #2dd4bf;
+        --surface-color: #1e293b;
+        --background-color: #0f172a;
+        --primary-text: #f8fafc;
+        --secondary-text: #cbd5e1;
+        --border-color: #475569;
+    }
+
+    .sidebar {
+        background-color: #172554;
+    }
+
+    .dashboard-card:hover {
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    }
 }
-
-/* ---------- Expense Table Card ---------- */
-.expenses {
-    background-color: var(--card);
-    padding: 25px;
-    margin: 0 auto 25px;
-    max-width: 900px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-}
-
-/* ---------- Table ---------- */
-.expenses table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-.expenses th,
-.expenses td {
-    border: 1px solid var(--border);
-    padding: 12px;
-    text-align: left;
-    font-family: 'Roboto', sans-serif;
-}
-
-.expenses th {
-    background-color: var(--table-header);
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-}
-
-.expenses tr:nth-child(even) {
-    background-color: var(--table-alt);
-}
-
-.expenses tr:hover {
-    background-color: var(--hover);
-}
-
-/* ---------- How To Use ---------- */
-.how-to-use {
-    max-width: 900px;
-    margin: 0 auto 25px;
-    padding: 20px;
-    background-color: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-}
-
-summary {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    color: var(--primary-dark);
-    cursor: pointer;
-}
-
-/* ---------- Video ---------- */
-.video {
-    max-width: 900px;
-    margin: 0 auto 25px;
-    padding: 20px;
-    background-color: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-}
-
-.video iframe {
-    max-width: 100%;
-    border-radius: 8px;
-}
-
-
