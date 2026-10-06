@@ -89,3 +89,22 @@ Budget-tracker/
 ├── style.css
 └── README.md
 ```
+
+
+## JavaScript Foundation
+
+### What SpendWise Does
+
+SpendWise is a personal budget and expense tracker. It helps users enter their budget and expenses and calculates the remaining balance.
+
+### JavaScript Concepts Implemented
+
+The project uses JavaScript variables, data types, user input, calculations, functions, and console output.
+
+### Variables
+
+Variables are used to store budget and expense information.
+
+```javascript
+let budget = 50000;
+let expenses = 15000;
