@@ -93,13 +93,20 @@ Budget-tracker/
 
 ## JavaScript Foundation
 
-### What SpendWise Does
-
-SpendWise is a personal budget and expense tracker. It helps users enter their budget and expenses and calculates the remaining balance.
+SpendWise uses JavaScript to make the budget tracker interactive. The JavaScript code collects information from the user, performs calculations, and displays the results in the browser console.
 
 ### JavaScript Concepts Implemented
 
-The project uses JavaScript variables, data types, user input, calculations, functions, and console output.
+The JavaScript foundation of SpendWise demonstrates the following concepts:
+
+* Variables
+* User input with `prompt()`
+* Data types
+* Number conversion using `Number()`
+* Arithmetic calculations
+* Functions
+* Function parameters and return values
+* Console output using `console.log()`
 
 ### Variables
 
@@ -108,3 +115,87 @@ Variables are used to store budget and expense information.
 ```javascript
 let budget = 50000;
 let expenses = 15000;
+```
+
+The `budget` variable stores the available budget, while `expenses` stores the total expenses.
+
+### User Input
+
+SpendWise collects budget information directly from the user using JavaScript prompts.
+
+```javascript
+let userBudget = prompt("Enter your budget:");
+let userExpenses = prompt("Enter your total expenses:");
+```
+
+The user enters their budget and total expenses when the JavaScript program runs.
+
+### Converting User Input to Numbers
+
+Values collected using `prompt()` are returned as text. Therefore, `Number()` is used to convert the user input into numbers before performing calculations.
+
+```javascript
+userBudget = Number(userBudget);
+userExpenses = Number(userExpenses);
+```
+
+This allows SpendWise to correctly perform mathematical calculations with the entered values.
+
+### Calculating the Remaining Balance
+
+The remaining balance is calculated by subtracting total expenses from the budget.
+
+```javascript
+let balance = calculateBalance(userBudget, userExpenses);
+```
+
+For example, if the user enters a budget of 50,000 and expenses of 15,000, the remaining balance will be 35,000.
+
+### Reusable Functions
+
+SpendWise uses reusable functions to organize the calculations.
+
+```javascript
+function calculateBalance(budget, expenses) {
+    return budget - expenses;
+}
+```
+
+The `calculateBalance()` function receives the budget and expenses as parameters and returns the remaining balance.
+
+Another function calculates an estimated weekly budget:
+
+```javascript
+function calculateWeeklyBudget(monthlyBudget) {
+    return monthlyBudget / 4;
+}
+```
+
+Using functions makes the JavaScript code easier to understand, reuse, and maintain.
+
+### Displaying Results
+
+The calculated information is displayed in the browser console using `console.log()`.
+
+```javascript
+console.log("User Budget:", userBudget);
+console.log("User Expenses:", userExpenses);
+console.log("Remaining Balance:", balance);
+console.log("Weekly Budget:", weeklyBudget);
+```
+
+This allows the user to verify the budget, expenses, remaining balance, and estimated weekly budget.
+
+### Example
+
+If the user enters:
+
+* Budget: 50,000
+* Expenses: 15,000
+
+SpendWise calculates:
+
+* Remaining Balance: 35,000
+* Weekly Budget: 12,500
+
+This JavaScript foundation provides the basic functionality needed to continue developing SpendWise into a fully interactive budget and expense tracker.
