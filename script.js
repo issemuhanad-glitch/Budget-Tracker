@@ -25,3 +25,11 @@ let balance = calculateBalance(userBudget, userExpenses);
 console.log("User Budget:", userBudget);
 console.log("User Expenses:", userExpenses);
 console.log("Remaining Balance:", balance);
+
+// Display results on the SpendWise page
+
+const result = document.createElement("p");
+
+result.textContent = `Budget: ${userBudget} | Expenses: ${userExpenses} | Remaining Balance: ${balance}`;
+
+document.body.appendChild(result);
