@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,10 +20,10 @@
 
             <nav class="navigation">
                 <a href="#" class="nav-item">Dashboard</a>
-                <a href="#" class="nav-item">Expenses</a>
-                <a href="#" class="nav-item">Budget</a>
-                <a href="#" class="nav-item">Savings</a>
-                <a href="#" class="nav-item">Reports</a>
+                <a href="#expenses" class="nav-item">Expenses</a>
+                <a href="#budget" class="nav-item">Budget</a>
+                <a href="#savings" class="nav-item">Savings</a>
+                <a href="#reports" class="nav-item">Reports</a>
             </nav>
         </aside>
 
@@ -41,53 +42,108 @@
                 </div>
             </header>
 
-            <!-- Financial Cards -->
+            <!-- Budget Input -->
+            <section id="budget" class="budget-section">
+                <h2>Set Your Budget</h2>
+                <form id="budget-form">
+                    <label for="budget-input">Monthly Budget (KSh)</label>
+                    <input type="number" id="budget-input" min="1" step="0.01" placeholder="Enter your budget" required>
+                    <button type="submit">Update Budget</button>
+                </form>
+            </section>
+
+            <!-- Financial Summary -->
             <section class="dashboard-cards">
 
                 <article class="dashboard-card" tabindex="0">
-                    <h3>Food</h3>
-                    <p class="amount">$250</p>
-                    <span>Monthly spending</span>
+                    <h3>Total Budget</h3>
+                    <p class="amount" id="total-budget">KSh 0</p>
+                    <span>Monthly budget</span>
                 </article>
 
                 <article class="dashboard-card" tabindex="0">
-                    <h3>Transport</h3>
-                    <p class="amount">$120</p>
-                    <span>Monthly spending</span>
+                    <h3>Total Expenses</h3>
+                    <p class="amount" id="total-expenses">KSh 0</p>
+                    <span>Money spent</span>
                 </article>
 
                 <article class="dashboard-card" tabindex="0">
-                    <h3>Rent</h3>
-                    <p class="amount">$600</p>
-                    <span>Monthly spending</span>
-                </article>
-
-                <article class="dashboard-card" tabindex="0">
-                    <h3>Entertainment</h3>
-                    <p class="amount">$100</p>
-                    <span>Monthly spending</span>
-                </article>
-
-                <article class="dashboard-card" tabindex="0">
-                    <h3>Savings</h3>
-                    <p class="amount">$300</p>
-                    <span>Monthly savings</span>
-                </article>
-
-                <article class="dashboard-card" tabindex="0">
-                    <h3>Utilities</h3>
-                    <p class="amount">$150</p>
-                    <span>Monthly spending</span>
+                    <h3>Remaining Balance</h3>
+                    <p class="amount" id="remaining-balance">KSh 0</p>
+                    <span>Available money</span>
                 </article>
 
             </section>
 
-        </main>
+            <!-- Budget Feedback -->
+            <section class="budget-status">
+                <h2>Budget Status</h2>
+                <p id="budget-message" aria-live="polite">
+                    Set your budget to get started.
+                </p>
+            </section>
 
+            <!-- Add Expense Form -->
+            <section id="expenses" class="expense-section">
+                <h2>Add New Expense</h2>
+
+                <form id="expense-form">
+
+                    <label for="expense-name">Expense Name</label>
+                    <input type="text" id="expense-name" placeholder="e.g. Shopping" required>
+
+                    <label for="expense-amount">Amount (KSh)</label>
+                    <input type="number" id="expense-amount" min="0.01" step="0.01" placeholder="Enter amount" required>
+
+                    <label for="expense-category">Category</label>
+                    <select id="expense-category" required>
+                        <option value="">Select category</option>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Rent">Rent</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Savings">Savings</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <label for="expense-date">Date</label>
+                    <input type="date" id="expense-date" required>
+
+                    <button type="submit">Add Expense</button>
+
+                </form>
+            </section>
+
+            <!-- Expense Records -->
+            <section class="expense-list">
+                <h2>My Expenses</h2>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="expense-table-body">
+                            <tr>
+                                <td colspan="4">No expenses added yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
     </div>
 
-
     <script src="script.js"></script>
-    
+
 </body>
+
 </html>
