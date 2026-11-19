@@ -1,15 +1,15 @@
+// =============================================
+// SpendWise - Week 6 Interactive Budget Tracker
+// =============================================
 
-// =====================================
-// SpendWise - Week 6 Interactive Project
-// =====================================
+// The budget and expense records are stored as JavaScript data.
+const DEFAULT_BUDGET = 50000;
+const STORAGE_KEY = "spendwise-week6-data";
 
-// 1. Budget variable
-let budget = 50000;
-
-// 2. Array to store multiple expenses
+let budget = DEFAULT_BUDGET;
 let expenses = [];
 
-// 3. Get HTML elements from the DOM
+// Get the HTML elements that JavaScript needs to update.
 const budgetForm = document.getElementById("budget-form");
 const budgetInput = document.getElementById("budget-input");
 
@@ -22,123 +22,227 @@ const expenseDate = document.getElementById("expense-date");
 const totalBudgetDisplay = document.getElementById("total-budget");
 const totalExpensesDisplay = document.getElementById("total-expenses");
 const remainingBalanceDisplay = document.getElementById("remaining-balance");
-
 const budgetMessage = document.getElementById("budget-message");
-const expenseTableBody = document.getElementById("expense-table-body");
+const budgetProgress = document.getElementById("budget-progress");
+const budgetUsedDisplay = document.getElementById("budget-used");
 
-// 4. Format money in Kenyan Shillings
+const expenseTableBody = document.getElementById("expense-table-body");
+const expenseCountDisplay = document.getElementById("expense-count");
+const clearExpensesButton = document.getElementById("clear-expenses-button");
+const categoryReportBody = document.getElementById("category-report-body");
+
+// Format all money values consistently in Kenyan Shillings.
 function formatMoney(amount) {
-    return "KSh " + amount.toLocaleString("en-KE", {
+    return new Intl.NumberFormat("en-KE", {
+        style: "currency",
+        currency: "KES",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
-    });
+    }).format(amount).replace("KES", "KSh");
 }
 
-// 5. Calculate total expenses using a loop
+// Use the local date rather than UTC so the date is correct for the user.
+function getTodayDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+// Load saved data when the page opens.
+// The try/catch prevents damaged browser storage from stopping the app.
+function loadData() {
+    try {
+        const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+        if (savedData && typeof savedData === "object") {
+            if (Number.isFinite(savedData.budget) && savedData.budget > 0) {
+                budget = savedData.budget;
+            }
+
+            if (Array.isArray(savedData.expenses)) {
+                expenses = savedData.expenses.filter((expense) =>
+                    expense &&
+                    typeof expense.name === "string" &&
+                    Number.isFinite(expense.amount) &&
+                    expense.amount > 0 &&
+                    typeof expense.category === "string" &&
+                    typeof expense.date === "string"
+                );
+            }
+        }
+    } catch (error) {
+        console.warn("Saved SpendWise data could not be loaded.", error);
+    }
+}
+
+// Save the current budget and all expense records in this browser.
+function saveData() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ budget, expenses }));
+    } catch (error) {
+        console.warn("SpendWise could not save data in this browser.", error);
+        budgetMessage.textContent =
+            "Your changes are displayed, but this browser could not save them.";
+    }
+}
+
+// Add all expense amounts together using a loop.
 function calculateTotalExpenses() {
     let total = 0;
 
-    for (let expense of expenses) {
+    for (const expense of expenses) {
         total += expense.amount;
     }
 
     return total;
 }
 
-// 6. Calculate remaining balance
+// Calculate the money left after expenses.
 function calculateBalance() {
     return budget - calculateTotalExpenses();
 }
 
-// 7. Check budget status using conditionals
+// Use conditional statements to provide feedback about the budget.
 function checkBudget() {
     const balance = calculateBalance();
+    const totalExpenses = calculateTotalExpenses();
 
     if (balance < 0) {
         budgetMessage.textContent =
-            "Warning! You have exceeded your budget by " +
-            formatMoney(Math.abs(balance));
-
+            `Warning! You have exceeded your budget by ${formatMoney(Math.abs(balance))}.`;
+        budgetMessage.className = "status-danger";
     } else if (balance === 0) {
-        budgetMessage.textContent =
-            "You have used your entire budget!";
-
-    } else if (balance <= budget * 0.2) {
+        budgetMessage.textContent = "You have used your entire budget.";
+        budgetMessage.className = "status-warning";
+    } else if (budget > 0 && balance <= budget * 0.2) {
         budgetMessage.textContent =
             "Warning! Your remaining budget is running low.";
-
+        budgetMessage.className = "status-warning";
+    } else if (totalExpenses === 0) {
+        budgetMessage.textContent =
+            "Your budget is ready. Add an expense to start tracking your spending.";
+        budgetMessage.className = "status-good";
     } else {
         budgetMessage.textContent =
             "Good job! You are within your budget.";
+        budgetMessage.className = "status-good";
     }
 }
 
-// 8. Update dashboard information
+// Update the summary cards and budget progress indicator.
 function updateDashboard() {
     const totalExpenses = calculateTotalExpenses();
     const balance = calculateBalance();
+    const percentageUsed = budget > 0
+        ? (totalExpenses / budget) * 100
+        : 0;
 
     totalBudgetDisplay.textContent = formatMoney(budget);
+    totalExpensesDisplay.textContent = formatMoney(totalExpenses);
+    remainingBalanceDisplay.textContent = formatMoney(balance);
 
-    totalExpensesDisplay.textContent =
-        formatMoney(totalExpenses);
+    // Keep the progress element between 0 and 100, even when over budget.
+    budgetProgress.value = Math.min(Math.max(percentageUsed, 0), 100);
+    budgetUsedDisplay.textContent = `${Math.round(percentageUsed)}%`;
 
-    remainingBalanceDisplay.textContent =
-        formatMoney(balance);
-
+    remainingBalanceDisplay.classList.toggle("negative-balance", balance < 0);
     checkBudget();
 }
 
-// 9. Display expenses on the webpage
+// Display every expense in the table. Each record gets its own delete button.
 function displayExpenses() {
+    expenseTableBody.replaceChildren();
+    expenseCountDisplay.textContent = expenses.length;
 
-    // Clear previous records
-    expenseTableBody.innerHTML = "";
-
-    // Check if the array is empty
     if (expenses.length === 0) {
         const row = document.createElement("tr");
         const cell = document.createElement("td");
-
-        cell.colSpan = 4;
+        cell.colSpan = 5;
         cell.textContent = "No expenses added yet.";
-
+        cell.className = "empty-state";
         row.appendChild(cell);
         expenseTableBody.appendChild(row);
-
     } else {
-
-        // Loop through all expense records
-        for (let expense of expenses) {
-
+        for (const expense of expenses) {
             const row = document.createElement("tr");
 
             const nameCell = document.createElement("td");
-            const amountCell = document.createElement("td");
-            const categoryCell = document.createElement("td");
-            const dateCell = document.createElement("td");
-
             nameCell.textContent = expense.name;
+
+            const amountCell = document.createElement("td");
             amountCell.textContent = formatMoney(expense.amount);
+
+            const categoryCell = document.createElement("td");
             categoryCell.textContent = expense.category;
+
+            const dateCell = document.createElement("td");
             dateCell.textContent = expense.date;
 
-            row.appendChild(nameCell);
-            row.appendChild(amountCell);
-            row.appendChild(categoryCell);
-            row.appendChild(dateCell);
+            const actionCell = document.createElement("td");
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "delete-button";
+            deleteButton.dataset.expenseId = expense.id;
+            deleteButton.setAttribute("aria-label", `Delete ${expense.name}`);
+            actionCell.appendChild(deleteButton);
 
+            row.append(
+                nameCell,
+                amountCell,
+                categoryCell,
+                dateCell,
+                actionCell
+            );
             expenseTableBody.appendChild(row);
         }
     }
 
-    // Update dashboard after displaying expenses
     updateDashboard();
+    displayCategoryReport();
 }
 
-// 10. Handle budget form submission
-budgetForm.addEventListener("submit", function(event) {
+// Build a category report by processing the expense array with a loop.
+function displayCategoryReport() {
+    categoryReportBody.replaceChildren();
 
+    if (expenses.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 2;
+        cell.textContent = "Add expenses to see your report.";
+        cell.className = "empty-state";
+        row.appendChild(cell);
+        categoryReportBody.appendChild(row);
+        return;
+    }
+
+    const categoryTotals = {};
+
+    for (const expense of expenses) {
+        if (categoryTotals[expense.category] === undefined) {
+            categoryTotals[expense.category] = 0;
+        }
+        categoryTotals[expense.category] += expense.amount;
+    }
+
+    for (const category in categoryTotals) {
+        const row = document.createElement("tr");
+        const categoryCell = document.createElement("td");
+        const totalCell = document.createElement("td");
+
+        categoryCell.textContent = category;
+        totalCell.textContent = formatMoney(categoryTotals[category]);
+
+        row.append(categoryCell, totalCell);
+        categoryReportBody.appendChild(row);
+    }
+}
+
+// Handle a budget form submission.
+budgetForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
     const newBudget = Number(budgetInput.value);
@@ -149,17 +253,14 @@ budgetForm.addEventListener("submit", function(event) {
     }
 
     budget = newBudget;
-
+    saveData();
     updateDashboard();
-
-    budgetForm.reset();
-
+    budgetInput.value = "";
     alert("Your budget has been updated successfully!");
 });
 
-// 11. Handle expense form submission
-expenseForm.addEventListener("submit", function(event) {
-
+// Handle adding a new expense.
+expenseForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
     const name = expenseName.value.trim();
@@ -167,7 +268,7 @@ expenseForm.addEventListener("submit", function(event) {
     const category = expenseCategory.value;
     const date = expenseDate.value;
 
-    // Validate user input
+    // Validate the form before adding a record to the array.
     if (
         name === "" ||
         !Number.isFinite(amount) ||
@@ -179,30 +280,64 @@ expenseForm.addEventListener("submit", function(event) {
         return;
     }
 
-    // Create a new expense record
     const newExpense = {
-        name: name,
-        amount: amount,
-        category: category,
-        date: date
+        id: (window.crypto && crypto.randomUUID)
+            ? crypto.randomUUID()
+            : `${Date.now()}-${Math.floor(Math.random() * 100000)}`,
+        name,
+        amount,
+        category,
+        date
     };
 
-    // Store the record in the array
+    // push() adds the new expense object to the expenses array.
     expenses.push(newExpense);
 
-    // Update the webpage
+    saveData();
     displayExpenses();
-
-    // Clear the form
     expenseForm.reset();
-
+    expenseDate.value = getTodayDate();
     alert("Expense added successfully!");
 });
 
-// 12. Set today's date automatically
-expenseDate.value = new Date().toISOString().split("T")[0];
+// Use event delegation so delete buttons work for dynamically created rows.
+expenseTableBody.addEventListener("click", function (event) {
+    const clickedButton = event.target.closest(".delete-button");
 
-// 13. Display initial dashboard information
+    if (!clickedButton) {
+        return;
+    }
+
+    const expenseId = clickedButton.dataset.expenseId;
+    expenses = expenses.filter((expense) => expense.id !== expenseId);
+
+    saveData();
+    displayExpenses();
+});
+
+// Clear all expense records after asking the user to confirm.
+clearExpensesButton.addEventListener("click", function () {
+    if (expenses.length === 0) {
+        alert("There are no expenses to clear.");
+        return;
+    }
+
+    const confirmed = confirm("Are you sure you want to delete all expense records?");
+    if (!confirmed) {
+        return;
+    }
+
+    expenses = [];
+    saveData();
+    displayExpenses();
+});
+
+// Set up the page using saved data and show the initial dashboard.
+loadData();
+budgetInput.value = budget;
+expenseDate.value = getTodayDate();
+document.getElementById("current-year").textContent = new Date().getFullYear();
+
 displayExpenses();
 
 console.log("SpendWise Week 6 application is running!");

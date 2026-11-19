@@ -1,99 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SpendWise helps you track expenses and manage your monthly budget.">
     <title>SpendWise Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
-
 <body>
-
     <div class="dashboard">
-
-        <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="logo">
-                <h2>SpendWise</h2>
-            </div>
-
-            <nav class="navigation">
-                <a href="#" class="nav-item">Dashboard</a>
+            <div class="logo"><h2>SpendWise</h2></div>
+            <nav class="navigation" aria-label="Main navigation">
+                <a href="#dashboard" class="nav-item">Dashboard</a>
                 <a href="#expenses" class="nav-item">Expenses</a>
                 <a href="#budget" class="nav-item">Budget</a>
-                <a href="#savings" class="nav-item">Savings</a>
                 <a href="#reports" class="nav-item">Reports</a>
             </nav>
+            <p class="sidebar-note">Make every shilling count.</p>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
-
-            <!-- Header -->
-            <header class="dashboard-header">
+            <header class="dashboard-header" id="dashboard">
                 <div>
                     <h1>My Dashboard</h1>
-                    <p>Track and manage your finances.</p>
+                    <p>Track your spending and stay in control of your finances.</p>
                 </div>
-
-                <div class="user-info">
-                    <span>Welcome back!</span>
-                </div>
+                <div class="user-info"><span>Welcome back!</span></div>
             </header>
 
-            <!-- Budget Input -->
             <section id="budget" class="budget-section">
-                <h2>Set Your Budget</h2>
-                <form id="budget-form">
+                <div class="section-heading">
+                    <div>
+                        <h2>Set Your Budget</h2>
+                        <p>Enter the total amount you plan to spend this month.</p>
+                    </div>
+                </div>
+                <form id="budget-form" class="budget-form">
                     <label for="budget-input">Monthly Budget (KSh)</label>
-                    <input type="number" id="budget-input" min="1" step="0.01" placeholder="Enter your budget" required>
+                    <input type="number" id="budget-input" min="0.01" step="0.01"
+                           placeholder="Enter your budget" required>
                     <button type="submit">Update Budget</button>
                 </form>
             </section>
 
-            <!-- Financial Summary -->
-            <section class="dashboard-cards">
-
+            <section class="dashboard-cards" aria-label="Financial summary">
                 <article class="dashboard-card" tabindex="0">
                     <h3>Total Budget</h3>
-                    <p class="amount" id="total-budget">KSh 0</p>
+                    <p class="amount" id="total-budget">KSh 50,000.00</p>
                     <span>Monthly budget</span>
                 </article>
-
                 <article class="dashboard-card" tabindex="0">
                     <h3>Total Expenses</h3>
-                    <p class="amount" id="total-expenses">KSh 0</p>
+                    <p class="amount" id="total-expenses">KSh 0.00</p>
                     <span>Money spent</span>
                 </article>
-
                 <article class="dashboard-card" tabindex="0">
                     <h3>Remaining Balance</h3>
-                    <p class="amount" id="remaining-balance">KSh 0</p>
+                    <p class="amount" id="remaining-balance">KSh 50,000.00</p>
                     <span>Available money</span>
                 </article>
-
             </section>
 
-            <!-- Budget Feedback -->
-            <section class="budget-status">
-                <h2>Budget Status</h2>
-                <p id="budget-message" aria-live="polite">
-                    Set your budget to get started.
-                </p>
+            <section class="budget-status" aria-labelledby="budget-status-heading">
+                <h2 id="budget-status-heading">Budget Status</h2>
+                <p id="budget-message" aria-live="polite">Good job! You are within your budget.</p>
+                <div class="progress-label">
+                    <span>Budget used</span>
+                    <strong id="budget-used">0%</strong>
+                </div>
+                <progress id="budget-progress" value="0" max="100">0%</progress>
             </section>
 
-            <!-- Add Expense Form -->
             <section id="expenses" class="expense-section">
                 <h2>Add New Expense</h2>
-
                 <form id="expense-form">
-
                     <label for="expense-name">Expense Name</label>
-                    <input type="text" id="expense-name" placeholder="e.g. Shopping" required>
+                    <input type="text" id="expense-name" maxlength="60"
+                           placeholder="e.g. Shopping" required>
 
                     <label for="expense-amount">Amount (KSh)</label>
-                    <input type="number" id="expense-amount" min="0.01" step="0.01" placeholder="Enter amount" required>
+                    <input type="number" id="expense-amount" min="0.01" step="0.01"
+                           placeholder="Enter amount" required>
 
                     <label for="expense-category">Category</label>
                     <select id="expense-category" required>
@@ -109,41 +98,60 @@
 
                     <label for="expense-date">Date</label>
                     <input type="date" id="expense-date" required>
-
                     <button type="submit">Add Expense</button>
-
                 </form>
             </section>
 
-            <!-- Expense Records -->
-            <section class="expense-list">
-                <h2>My Expenses</h2>
-
+            <section class="expense-list" aria-labelledby="expense-list-heading">
+                <div class="section-heading expense-list-heading">
+                    <div>
+                        <h2 id="expense-list-heading">My Expenses</h2>
+                        <p><span id="expense-count">0</span> expense record(s)</p>
+                    </div>
+                    <button type="button" id="clear-expenses-button" class="button-secondary">
+                        Clear All Expenses
+                    </button>
+                </div>
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Amount</th>
-                                <th>Category</th>
-                                <th>Date</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
-
                         <tbody id="expense-table-body">
-                            <tr>
-                                <td colspan="4">No expenses added yet.</td>
-                            </tr>
+                            <tr><td colspan="5" class="empty-state">No expenses added yet.</td></tr>
                         </tbody>
                     </table>
                 </div>
             </section>
 
+            <section id="reports" class="report-section">
+                <h2>Spending Report</h2>
+                <p class="section-description">A summary of how much you have spent in each category.</p>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Category</th>
+                                <th scope="col">Total Spent</th>
+                            </tr>
+                        </thead>
+                        <tbody id="category-report-body">
+                            <tr><td colspan="2" class="empty-state">Add expenses to see your report.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <footer class="page-footer">
+                <p>SpendWise &copy; <span id="current-year"></span> — Track wisely. Spend wisely.</p>
+            </footer>
         </main>
     </div>
-
-    <script src="script.js"></script>
-
 </body>
-
 </html>
